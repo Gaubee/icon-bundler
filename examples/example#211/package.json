@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "svgtofont --sources ./svg --output ./font"
+    "start": "icon-bundler --sources ./svg --output ./font"
   },
   "keywords": [],
-  "author": "jaywcjlove",
+  "author": "gaubee",
   "license": "ISC",
   "devDependencies": {
-    "svgtofont": "^6.0.0"
+    "icon-bundler": "^6.0.0"
   }
 }

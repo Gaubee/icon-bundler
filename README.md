@@ -1,35 +1,35 @@
-[Free Font](https://github.com/jaywcjlove/free-font)
+[Free Font](https://github.com/gaubee/free-font)
 
 <p align="center">
-  <a href="https://github.com/jaywcjlove/svgtofont/">
-    <img src="https://github.com/jaywcjlove/svgtofont/assets/1680273/bd3aeeea-eac5-43ae-9bd0-c978d81c43a5" alt="SVG To Font" />
+  <a href="https://github.com/gaubee/icon-bundler/">
+    <img src="https://github.com/gaubee/icon-bundler/assets/1680273/bd3aeeea-eac5-43ae-9bd0-c978d81c43a5" alt="SVG To Font" />
   </a>
 </p>
 
 <p align="center">
-  <a href="https://jaywcjlove.github.io/#/sponsor" target="_blank">
+  <a href="https://gaubee.github.io/#/sponsor" target="_blank">
     <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-048754?logo=buymeacoffee" alt="Buy me a coffee">
   </a>
-  <a href="https://github.com/jaywcjlove/svgtofont/actions">
-    <img src="https://github.com/jaywcjlove/svgtofont/workflows/Build/badge.svg" alt="Build & Deploy">
+  <a href="https://github.com/gaubee/icon-bundler/actions">
+    <img src="https://github.com/gaubee/icon-bundler/workflows/Build/badge.svg" alt="Build & Deploy">
   </a>
-  <a href="https://gitee.com/jaywcjlove/svgtofont">
-    <img src="https://jaywcjlove.github.io/sb/ico/gitee.svg" alt="Gitee Repo">
+  <a href="https://gitee.com/gaubee/icon-bundler">
+    <img src="https://gaubee.github.io/sb/ico/gitee.svg" alt="Gitee Repo">
   </a>
-  <a href="https://uiwjs.github.io/npm-unpkg/#/pkg/svgtofont/file/README.md">
+  <a href="https://uiwjs.github.io/npm-unpkg/#/pkg/icon-bundler/file/README.md">
     <img src="https://img.shields.io/badge/Open%20in-unpkg-blue" alt="Open in unpkg">
   </a>
-  <a href="https://www.npmjs.com/package/svgtofont">
-    <img src="https://img.shields.io/npm/dm/svgtofont.svg?style=flat" alt="NPM Download">
+  <a href="https://www.npmjs.com/package/icon-bundler">
+    <img src="https://img.shields.io/npm/dm/icon-bundler.svg?style=flat" alt="NPM Download">
   </a>
-  <a href="https://www.npmjs.com/package/svgtofont">
-    <img src="https://img.shields.io/npm/v/svgtofont.svg" alt="npm version">
+  <a href="https://www.npmjs.com/package/icon-bundler">
+    <img src="https://img.shields.io/npm/v/icon-bundler.svg" alt="npm version">
   </a>
 </p>
 
 Read a set of SVG icons and ouput a TTF/EOT/WOFF/WOFF2/SVG font, Generator of fonts from SVG icons.
 
-[Install](#install) · [Usage](#using-with-nodejs) · [Command](#using-with-command) · [Font Usage](#font-usage) · [API](#api) · [options](#options) · [npm](http://npm.im/svgtofont) · [License](#license)
+[Install](#install) · [Usage](#using-with-nodejs) · [Command](#using-with-command) · [Font Usage](#font-usage) · [API](#api) · [options](#options) · [npm](http://npm.im/icon-bundler) · [License](#license)
 
 **Features:**  
 
@@ -47,7 +47,7 @@ Read a set of SVG icons and ouput a TTF/EOT/WOFF/WOFF2/SVG font, Generator of fo
 ╭┈┈┈┈┈┈┈┈╮                      ┆   ┆    svg    ┆┈┈╮ ┆
 ┆iconfont┆┈┈╮                   ┆   ╰┈┈┈┈┈┈┈┈┈┈┈╯  ┆ ┆
 ╰┈┈┈┈┈┈┈┈╯  ┆  ╭┈┈┈┈┈┈┈┈┈┈┈┈╮   ┆   ╭┈┈┈┈┈┈┈┈┈┈┈╮  ┆ ┆
-            ├┈▶┆download svg┆┈┈▶┆   ┆┈svgtofont┈┆  ┆ ┆
+            ├┈▶┆download svg┆┈┈▶┆   ┆┈icon-bundler┈┆  ┆ ┆
 ╭┈┈┈┈┈┈┈┈╮  ┆  ╰┈┈┈┈┈┈┈┈┈┈┈┈╯   ┆╭┈┈┆create font┆◀┈╯ ┆
 ┆icomoon ┆┈┈╯                   ┆┆  ╰┈┈┈┈┈┈┈┈┈┈┈╯    ┆
 ╰┈┈┈┈┈┈┈┈╯                      ┆┆  ╭┈┈┈┈┈┈┈┈┈┈┈╮    ┆
@@ -68,12 +68,12 @@ graph LR;
     click E "https://yesicon.app/" "216,162 High-Quality Vector Icons from Top Design Teams." _blank
     C .-> ide1
     subgraph ide1 [Project]
-        svg -->a2[svgtofont create font]
+        svg -->a2[icon-bundler create font]
         a2 .-> b3[use font]
     end
 ```
 
-**Icon Font Created By svgtofont**
+**Icon Font Created By icon-bundler**
 
 - [file-icons](https://uiwjs.github.io/file-icons/) File icons in the file tree.
 - [uiw-iconfont](https://github.com/uiwjs/icons) The premium icon font for [@uiwjs](https://github.com/uiwjs) Component Library. Support [`React`](https://github.com/facebook/react) & [`TypeScript`](https://github.com/microsoft/TypeScript).
@@ -83,13 +83,13 @@ graph LR;
 ## Install
 
 ```bash
-npm i svgtofont
+npm i icon-bundler
 ```
 
 > [!NOTE]  
 > This package `v5+` is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c): Node 18+ is needed to use it and it must be `import` instead of `require`.  
 > ```js
-> import svgtofont from 'svgtofont';
+> import iconBundler from 'icon-bundler';
 > ```
 
 #### Using With Command
@@ -97,9 +97,9 @@ npm i svgtofont
 ```json
 {
   "scripts": {
-    "font": "svgtofont --sources ./svg --output ./font --fontName uiw-font"
+    "font": "icon-bundler --sources ./svg --output ./font --fontName uiw-font"
   },
-  "svgtofont": {
+  "icon-bundler": {
     "css": {
       "fontSize": "12px"
     }
@@ -107,20 +107,20 @@ npm i svgtofont
 }
 ```
 
-You can add configuration to package.json. [#48](https://github.com/jaywcjlove/svgtofont/issues/48)
+You can add configuration to package.json. [#48](https://github.com/gaubee/icon-bundler/issues/48)
 
-Support for `.svgtofontrc` and [more](https://github.com/jaywcjlove/auto-config-loader/blob/add7ae012f5c3903296fbf0ef06e3631e379c2cc/core/README.md?plain=1#L106-L135) configuration files.
+Support for `.icon-bundlerrc` and [more](https://github.com/gaubee/auto-config-loader/blob/add7ae012f5c3903296fbf0ef06e3631e379c2cc/core/README.md?plain=1#L106-L135) configuration files.
 
 ```js
 {
-  "fontName": "svgtofont",
+  "fontName": "icon-bundler",
   "css": true
 }
 ```
 
 ```js
 /**
- * @type {import('svgtofont').SvgToFontOptions}
+ * @type {import('icon-bundler').SvgToFontOptions}
  */
 export default {
   fontName: "iconfont",
@@ -133,13 +133,13 @@ export default {
 > This package `v5+` is now pure ESM. Please [read this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
 ```js
-import svgtofont from 'svgtofont';
+import iconBundler from 'icon-bundler';
 import path from 'node:path';
  
-svgtofont({
+iconBundler({
   src: path.resolve(process.cwd(), 'icon'), // svg path, only searches one level, not recursive
   dist: path.resolve(process.cwd(), 'fonts'), // output path
-  fontName: 'svgtofont', // font name
+  fontName: 'icon-bundler', // font name
   css: true, // Create CSS files.
 }).then(() => {
   console.log('done!');
@@ -149,14 +149,14 @@ svgtofont({
 Or
 
 ```js
-import svgtofont from 'svgtofont';
+import iconBundler from 'icon-bundler';
 import path from 'node:path';
 
-svgtofont({
+iconBundler({
   src: path.resolve(process.cwd(), "icon"), // svg path, only searches one level, not recursive
   dist: path.resolve(process.cwd(), "fonts"), // output path
   styleTemplates: path.resolve(rootPath, "styles"), // file templates path (optional)
-  fontName: "svgtofont", // font name
+  fontName: "icon-bundler", // font name
   css: true, // Create CSS files.
   startUnicode: 0xea01, // unicode start number
   svgicons2svgfont: {
@@ -165,19 +165,19 @@ svgtofont({
   },
   // website = null, no demo html files
   website: {
-    title: "svgtofont",
+    title: "icon-bundler",
     // Must be a .svg format image.
     logo: path.resolve(process.cwd(), "svg", "git.svg"),
     version: pkg.version,
     meta: {
       description: "Converts SVG fonts to TTF/EOT/WOFF/WOFF2/SVG format.",
-      keywords: "svgtofont,TTF,EOT,WOFF,WOFF2,SVG"
+      keywords: "icon-bundler,TTF,EOT,WOFF,WOFF2,SVG"
     },
     description: ``,
     // Add a Github corner to your website
     // Like: https://github.com/uiwjs/react-github-corners
     corners: {
-      url: 'https://github.com/jaywcjlove/svgtofont',
+      url: 'https://github.com/gaubee/icon-bundler',
       width: 62, // default: 60
       height: 62, // default: 60
       bgColor: '#dc3545' // default: '#151513'
@@ -185,11 +185,11 @@ svgtofont({
     links: [
       {
         title: "GitHub",
-        url: "https://github.com/jaywcjlove/svgtofont"
+        url: "https://github.com/gaubee/icon-bundler"
       },
       {
         title: "Feedback",
-        url: "https://github.com/jaywcjlove/svgtofont/issues"
+        url: "https://github.com/gaubee/icon-bundler/issues"
       },
       {
         title: "Font Class",
@@ -200,7 +200,7 @@ svgtofont({
         url: "unicode.html"
       }
     ],
-    footerInfo: `Licensed under MIT. (Yes it's free and <a href="https://github.com/jaywcjlove/svgtofont">open-sourced</a>`
+    footerInfo: `Licensed under MIT. (Yes it's free and <a href="https://github.com/gaubee/icon-bundler">open-sourced</a>`
   }
 }).then(() => {
   console.log('done!');
@@ -210,7 +210,7 @@ svgtofont({
 ## API
 
 ```js
-import { createSVG, createTTF, createEOT, createWOFF, createWOFF2, createSvgSymbol, copyTemplate, createHTML } from 'svgtofont/lib/utils';
+import { createSVG, createTTF, createEOT, createWOFF, createWOFF2, createSvgSymbol, copyTemplate, createHTML } from 'icon-bundler/lib/utils';
 
 const options = { ... };
 
@@ -226,15 +226,15 @@ async function creatFont() {
 
 ## options
 
-> svgtofont(options)
+> iconBundler(options)
 
 ### config
 
 > Type: `config?: AutoConfOption<SvgToFontOptions>`
 
-By default, settings are automatically loaded from `.svgtofontrc` and `package.json`. You can add configuration to `package.json`. [#48](https://github.com/jaywcjlove/svgtofont/issues/48)
+By default, settings are automatically loaded from `.icon-bundlerrc` and `package.json`. You can add configuration to `package.json`. [#48](https://github.com/gaubee/icon-bundler/issues/48)
 
-Support for `.svgtofontrc` and [more](https://github.com/jaywcjlove/auto-config-loader/blob/add7ae012f5c3903296fbf0ef06e3631e379c2cc/core/README.md?plain=1#L106-L135) configuration files.
+Support for `.icon-bundlerrc` and [more](https://github.com/gaubee/auto-config-loader/blob/add7ae012f5c3903296fbf0ef06e3631e379c2cc/core/README.md?plain=1#L106-L135) configuration files.
 
 ### log
 
@@ -287,7 +287,7 @@ const icons = { "Git": "__GitUnicodeChar__", "Adobe": "__AdobeUnicodeChar__" };
 
 export const RangeIconFont = props => {
   const { name, ...rest } = props;
-  return (<Text style={{ fontFamily: 'svgtofont', fontSize: 16, color: '#000000', ...rest }}>
+  return (<Text style={{ fontFamily: 'icon-bundler', fontSize: 16, color: '#000000', ...rest }}>
     {icons[name]}
   </Text>);
 };
@@ -299,7 +299,7 @@ export const RangeIconFont = props => {
 > Type: `Boolean`  
 > Default value: `false`  
 
-Output `./dist/svgtofont.json`, The content is as follows:
+Output `./dist/icon-bundler.json`, The content is as follows:
 
 ```js
 {
@@ -312,14 +312,14 @@ Output `./dist/svgtofont.json`, The content is as follows:
 Or you can generate the file separately: 
 
 ```js
-const { generateIconsSource } = require('svgtofont/src/generate');	
+const { generateIconsSource } = require('icon-bundler/src/generate');	
 const path = require('path');	
 
 async function generate () {	
   const outPath = await generateIconsSource({	
     src: path.resolve(process.cwd(), 'svg'),	
     dist: path.resolve(process.cwd(), 'dist'),	
-    fontName: 'svgtofont',	
+    fontName: 'icon-bundler',	
   });	
 }	
 
@@ -337,8 +337,8 @@ Output `./dist/info.json`, The content is as follows:
 {
   "adobe": {
     "encodedCode": "\\ea01",
-    "prefix": "svgtofont",
-    "className": "svgtofont-adobe",
+    "prefix": "icon-bundler",
+    "className": "icon-bundler-adobe",
     "unicode": "&#59905;"
   },
   ...
@@ -461,12 +461,12 @@ type CSSOptions = {
   fontSize?: string | boolean;
   /**
    * Set the path in the css file
-   * https://github.com/jaywcjlove/svgtofont/issues/48#issuecomment-739547189
+   * https://github.com/gaubee/icon-bundler/issues/48#issuecomment-739547189
    */
   cssPath?: string;
   /**
    * Set file name
-   * https://github.com/jaywcjlove/svgtofont/issues/48#issuecomment-739547189
+   * https://github.com/gaubee/icon-bundler/issues/48#issuecomment-739547189
    */
   fileName?: string;
   /**
@@ -621,18 +621,18 @@ Define preview web content. Example:
   ...
   // website = null, no demo html files
   website: {
-    title: "svgtofont",
+    title: "icon-bundler",
     logo: path.resolve(process.cwd(), "svg", "git.svg"),
     version: pkg.version,
     meta: {
       description: "Converts SVG fonts to TTF/EOT/WOFF/WOFF2/SVG format.",
-      keywords: "svgtofont,TTF,EOT,WOFF,WOFF2,SVG",
+      keywords: "icon-bundler,TTF,EOT,WOFF,WOFF2,SVG",
       favicon: "./favicon.png"
     },
     // Add a Github corner to your website
     // Like: https://github.com/uiwjs/react-github-corners
     corners: {
-      url: 'https://github.com/jaywcjlove/svgtofont',
+      url: 'https://github.com/gaubee/icon-bundler',
       width: 62, // default: 60
       height: 62, // default: 60
       bgColor: '#dc3545' // default: '#151513'
@@ -640,11 +640,11 @@ Define preview web content. Example:
     links: [
       {
         title: "GitHub",
-        url: "https://github.com/jaywcjlove/svgtofont"
+        url: "https://github.com/gaubee/icon-bundler"
       },
       {
         title: "Feedback",
-        url: "https://github.com/jaywcjlove/svgtofont/issues"
+        url: "https://github.com/gaubee/icon-bundler/issues"
       },
       {
         title: "Font Class",
@@ -661,15 +661,15 @@ Define preview web content. Example:
 
 #### website.template
 
-> Type: `String`  
-> Default value: [index.njk](src/website/index.njk)  
+> Type: `React.FC<IconPageProps>`  
+> Default value: [index.tsx](src/website/index.tsx)  
 
-Custom template can customize parameters. You can define your own template based on the [default template](src/website/index.njk).
+Custom template can customize parameters. You can define your own template based on the [default template](src/website/index.tsx).
 
 ```js
 {
   website: {
-    template: path.join(process.cwd(), "my-template.njk")
+    template: import(process.cwd(), "my-template.tsx")
   }
 }
 ```
@@ -682,33 +682,33 @@ Set default home page.
 
 ## Font Usage
 
-Suppose the font name is defined as `svgtofont`, The default home page is `unicode`, Will generate: 
+Suppose the font name is defined as `icon-bundler`, The default home page is `unicode`, Will generate: 
 
 ```bash
 font-class.html
 index.html
-svgtofont.css
-svgtofont.eot
-svgtofont.json
-svgtofont.less
-svgtofont.module.less
-svgtofont.scss
-svgtofont.styl
-svgtofont.svg
-svgtofont.symbol.svg
-svgtofont.ttf
-svgtofont.woff
-svgtofont.woff2
+icon-bundler.css
+icon-bundler.eot
+icon-bundler.json
+icon-bundler.less
+icon-bundler.module.less
+icon-bundler.scss
+icon-bundler.styl
+icon-bundler.svg
+icon-bundler.symbol.svg
+icon-bundler.ttf
+icon-bundler.woff
+icon-bundler.woff2
 symbol.html
 ```
 
-Preview demo `font-class.html`, `symbol.html` and `index.html`. Automatically generated style `svgtofont.css` and `svgtofont.less`.
+Preview demo `font-class.html`, `symbol.html` and `index.html`. Automatically generated style `icon-bundler.css` and `icon-bundler.less`.
 
 ### symbol svg
 
 ```xml
 <svg class="icon" aria-hidden="true">
-  <use xlink:href="svgtofont.symbol.svg#svgtofont-git"></use>
+  <use xlink:href="icon-bundler.symbol.svg#icon-bundler-git"></use>
 </svg>
 ```
 
@@ -717,7 +717,7 @@ Preview demo `font-class.html`, `symbol.html` and `index.html`. Automatically ge
 ```html
 <style>
 .iconfont {
-  font-family: "svgtofont-iconfont" !important;
+  font-family: "icon-bundler-iconfont" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
@@ -733,8 +733,8 @@ Preview demo `font-class.html`, `symbol.html` and `index.html`. Automatically ge
 Support for `.less` and `.css` styles references.
 
 ```html
-<link rel="stylesheet" type="text/css" href="node_modules/fonts/svgtofont.css">
-<i class="svgtofont-apple"></i>
+<link rel="stylesheet" type="text/css" href="node_modules/fonts/icon-bundler.css">
+<i class="icon-bundler-apple"></i>
 ```
 
 ### Using With React
@@ -824,11 +824,11 @@ export declare const SvgToFont: (props: SvgToFontProps) => JSX.Element;
 
 As always, thanks to our amazing contributors!
 
-<a href="https://github.com/jaywcjlove/svgtofont/graphs/contributors">
-  <img src="https://jaywcjlove.github.io/svgtofont/CONTRIBUTORS.svg" />
+<a href="https://github.com/gaubee/icon-bundler/graphs/contributors">
+  <img src="https://gaubee.github.io/icon-bundler/CONTRIBUTORS.svg" />
 </a>
 
-Made with [contributors](https://github.com/jaywcjlove/github-action-contributors).
+Made with [contributors](https://github.com/gaubee/github-action-contributors).
 
 ## License
 

@@ -9,7 +9,7 @@ import pkg from '../package.json';
 
 // const fs = require('fs-extra');
 // const path = require('path');
-// const svgtofont = require('../lib/index.js');
+// const icon-bundler = require('../lib/index.js');
 
 it('example test case.', async () => {
   const dist = path.resolve(process.cwd(), 'examples', 'example', 'dist');
@@ -19,19 +19,19 @@ it('example test case.', async () => {
     'index.html',
     'react',
     'reactNative',
-    'svgtofont.css',
-    'svgtofont.d.ts',
-    'svgtofont.eot',
-    'svgtofont.json',
-    'svgtofont.less',
-    'svgtofont.module.less',
-    'svgtofont.scss',
-    'svgtofont.styl',
-    'svgtofont.svg',
-    'svgtofont.symbol.svg',
-    'svgtofont.ttf',
-    'svgtofont.woff',
-    'svgtofont.woff2',
+    'icon-bundler.css',
+    'icon-bundler.d.ts',
+    'icon-bundler.eot',
+    'icon-bundler.json',
+    'icon-bundler.less',
+    'icon-bundler.module.less',
+    'icon-bundler.scss',
+    'icon-bundler.styl',
+    'icon-bundler.svg',
+    'icon-bundler.symbol.svg',
+    'icon-bundler.ttf',
+    'icon-bundler.woff',
+    'icon-bundler.woff2',
     'symbol.html'
   ]);
 });
@@ -40,17 +40,17 @@ it('example simple test case.', async () => {
   const dist = path.resolve(process.cwd(), 'examples', 'example', 'example');
   const fileNames = await fs.readdir(dist);
   expect(fileNames).toEqual([
-    'svgtofont.css',
-    'svgtofont.eot',
-    'svgtofont.less',
-    'svgtofont.module.less',
-    'svgtofont.scss',
-    'svgtofont.styl',
-    'svgtofont.svg',
-    'svgtofont.symbol.svg',
-    'svgtofont.ttf',
-    'svgtofont.woff',
-    'svgtofont.woff2',
+    'icon-bundler.css',
+    'icon-bundler.eot',
+    'icon-bundler.less',
+    'icon-bundler.module.less',
+    'icon-bundler.scss',
+    'icon-bundler.styl',
+    'icon-bundler.svg',
+    'icon-bundler.symbol.svg',
+    'icon-bundler.ttf',
+    'icon-bundler.woff',
+    'icon-bundler.woff2',
   ]);
 })
 
@@ -62,20 +62,20 @@ it('templates templates test case.', async () => {
     'index.html',
     'react',
     'reactNative',
-    'svgtofont.css',
-    'svgtofont.eot',
-    'svgtofont.json',
-    'svgtofont.less',
-    'svgtofont.module.less',
-    'svgtofont.scss',
-    'svgtofont.styl',
-    'svgtofont.svg',
-    'svgtofont.symbol.svg',
-    'svgtofont.ttf',
-    'svgtofont.woff',
-    'svgtofont.woff2',
+    'icon-bundler.css',
+    'icon-bundler.eot',
+    'icon-bundler.json',
+    'icon-bundler.less',
+    'icon-bundler.module.less',
+    'icon-bundler.scss',
+    'icon-bundler.styl',
+    'icon-bundler.svg',
+    'icon-bundler.symbol.svg',
+    'icon-bundler.ttf',
+    'icon-bundler.woff',
+    'icon-bundler.woff2',
     'symbol.html'
   ]);
-  const css = await fs.readFile(path.resolve(dist, 'svgtofont.css'));
+  const css = await fs.readFile(path.resolve(dist, 'icon-bundler.css'));
   expect(css.toString().indexOf('Hello CSS!') > -1).toBeTruthy();
 })

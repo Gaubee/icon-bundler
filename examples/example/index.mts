@@ -1,82 +1,79 @@
-import path from 'path';
-import fs from 'fs-extra';
-import { fileURLToPath } from 'url';
-import svgtofont from '../../lib/index.js';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import fs from "fs-extra";
+
+import iconBundler from "../../src/index.ts";
+import process from "node:process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const pkg = fs.readJSONSync(path.resolve(__dirname, "../../package.json"));
 
-const rootPath = path.resolve(process.cwd(), "examples", "templates");
-/**
- * @type {import('../../lib/index.js').SvgToFontOptions}
- */
-const options = {
-  config: {
-    cwd: rootPath,
-  },
+console.log(pkg.name); // 输出: example
+console.log(pkg.version); // 输出: 1.0.0
+
+const rootPath = path.resolve(process.cwd(), "examples", "example");
+
+iconBundler({
   src: path.resolve(rootPath, "svg"), // svg path
   dist: path.resolve(rootPath, "dist"), // output path
   // emptyDist: true, // Clear output directory contents
-  styleTemplates: path.resolve(rootPath, "styles"),
-  fontName: "svgtofont", // font name
+  fontName: "icon-bundler", // font name
   css: true, // Create CSS files.
   outSVGReact: true,
   outSVGReactNative: true,
   outSVGPath: true,
-  startNumber: 20000, // unicode start number
+  startUnicode: 20000, // unicode start number
   svgicons2svgfont: {
     fontHeight: 1000,
-    normalize: true
+    normalize: true,
   },
-  useCSSVars: true,
+  typescript: true,
   // website = null, no demo html files
   website: {
     // Add a Github corner to your website
     // Like: https://github.com/uiwjs/react-github-corners
     corners: {
-      url: 'https://github.com/jaywcjlove/svgtofont',
+      url: "https://github.com/gaubee/icon-bundler",
       width: 62, // default: 60
       height: 62, // default: 60
-      bgColor: '#dc3545' // default: '#151513'
+      bgColor: "#dc3545", // default: '#151513'
     },
     index: "unicode", // Enum{"font-class", "unicode", "symbol"}
-    title: "svgtofont",
+    title: "icon-bundler",
     favicon: path.resolve(rootPath, "favicon.png"),
-    // Must be a .svg format image.
-    logo: path.resolve(rootPath, "svg", "git.svg"),
+    // Must be a .svg format image. Missing here to ensure the example works without it.
+    // logo: path.resolve(rootPath, "svg", "git.svg"),
     version: pkg.version,
     meta: {
       description: "Converts SVG fonts to TTF/EOT/WOFF/WOFF2/SVG format.",
-      keywords: "svgtofont,TTF,EOT,WOFF,WOFF2,SVG"
+      keywords: "icon-bundler,TTF,EOT,WOFF,WOFF2,SVG",
     },
     description: ``,
     links: [
       {
         title: "GitHub",
-        url: "https://github.com/jaywcjlove/svgtofont"
+        url: "https://github.com/gaubee/icon-bundler",
       },
       {
         title: "Feedback",
-        url: "https://github.com/jaywcjlove/svgtofont/issues"
+        url: "https://github.com/gaubee/icon-bundler/issues",
       },
       {
         title: "Font Class Demo",
-        url: "font-class.html"
+        url: "font-class.html",
       },
       {
         title: "Symbol Demo",
-        url: "symbol.html"
+        url: "symbol.html",
       },
       {
         title: "Unicode Demo",
-        url: "index.html"
-      }
+        url: "index.html",
+      },
     ],
-    footerInfo: `Licensed under MIT. (Yes it's free and <a target="_blank" href="https://github.com/jaywcjlove/svgtofont">open-sourced</a>)`
-  }
-}
-
-svgtofont(options).then(() => {
-  console.log("done!");
+    footerInfo: `Licensed under MIT. (Yes it's free and <a target="_blank" href="https://github.com/gaubee/icon-bundler">open-sourced</a>)`,
+  },
+}).then(() => {
+  console.log("Example::::done!");
 });

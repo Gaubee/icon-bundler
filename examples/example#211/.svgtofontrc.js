@@ -1,6 +1,6 @@
 import path from "path";
 /**
- * @type {import('svgtofont').SvgToFontOptions}
+ * @type {import('icon-bundler').SvgToFontOptions}
  */
 export default {
   fontName: "iconfont",

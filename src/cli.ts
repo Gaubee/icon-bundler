@@ -4,9 +4,10 @@ import FS from 'fs-extra';
 import { Arguments } from 'yargs';
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import path from 'path';
-import svgtofont from './index.js';
-import { log } from './log.js';
+import path from 'node:path';
+import iconBundler from './index.ts';
+import { log } from './log.ts';
+import process from "node:process";
 
 type ArgvResult = Arguments<{
   sources: string;
@@ -39,7 +40,7 @@ if (!FS.pathExistsSync(outputPath)) {
   FS.mkdirpSync(outputPath);
 }
 
-svgtofont({
+iconBundler({
   src: sourcesPath, // svg path
   dist: outputPath, // output path
   // emptyDist: true, // Clear output directory contents

@@ -1,23 +1,42 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs-extra';
-import image2uri from 'image2uri';
-import { type SVGIcons2SVGFontStreamOptions } from 'svgicons2svgfont';
-import color from 'colors-cli';
-import { autoConf, merge, type AutoConfOption } from 'auto-config-loader';
-import type { FontOptions } from 'svg2ttf';
-import type { Config } from 'svgo';
-import { log } from './log.js';
-import { generateIconsSource, generateReactIcons, generateReactNativeIcons } from './generate.js';
-import { createSVG, createTTF, createEOT, createWOFF, createWOFF2, createSvgSymbol, copyTemplate, type CSSOptions, createHTML, createTypescript, type TypescriptOptions } from './utils.js';
-import { generateFontFaceCSS, getDefaultOptions } from './utils.js';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import fs from "fs-extra";
+import image2uri from "image2uri";
+import { type SVGIcons2SVGFontStreamOptions } from "svgicons2svgfont";
+import color from "colors-cli";
+import { autoConf, merge, type AutoConfOption } from "auto-config-loader";
+import type { FontOptions } from "svg2ttf";
+import type { Config } from "svgo";
+import { log } from "./log.ts";
+import {
+  generateIconsSource,
+  generateReactIcons,
+  generateReactNativeIcons,
+} from "./generate.ts";
+import {
+  createSVG,
+  createTTF,
+  createEOT,
+  createWOFF,
+  createWOFF2,
+  createSvgSymbol,
+  copyTemplate,
+  type CSSOptions,
+  createHTML,
+  createTypescript,
+  type TypescriptOptions,
+} from "./utils.ts";
+import { generateFontFaceCSS, getDefaultOptions } from "./utils.ts";
+import process from "node:process";
+import type { IconPageProps, WebsiteTemplate } from "./website/index.tsx";
+import { match, P } from "ts-pattern";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export type SvgToFontOptions = {
-  /** Support for .svgtofontrc and more configuration files. */
-  config?: AutoConfOption<SvgToFontOptions>
+  /** Support for .icon-bundlerrc and more configuration files. */
+  config?: AutoConfOption<SvgToFontOptions>;
   /** A value of `false` disables logging */
   log?: boolean;
   /** log callback function  */
@@ -58,7 +77,7 @@ export type SvgToFontOptions = {
    */
   outSVGReactNative?: boolean;
   /**
-   * Output `./dist/svgtofont.json`, The content is as follows:
+   * Output `./dist/icon-bundler.json`, The content is as follows:
    * @example
    * ```js
    * {
@@ -76,8 +95,8 @@ export type SvgToFontOptions = {
    * {
    *    "adobe": {
    *      "encodedCode": "\\ea01",
-   *      "prefix": "svgtofont",
-   *      "className": "svgtofont-adobe",
+   *      "prefix": "icon-bundler",
+   *      "className": "icon-bundler-adobe",
    *      "unicode": "&#59905;"
    *    },
    *    .....
@@ -95,14 +114,14 @@ export type SvgToFontOptions = {
    * Create font class name prefix, default value font name.
    * @default fontName
    */
-  classNamePrefix?: SvgToFontOptions['fontName'];
+  classNamePrefix?: SvgToFontOptions["fontName"];
   /**
    * Symbol Name Delimiter, @default `-`
    */
   symbolNameDelimiter?: string;
   /**
-  * Directory of custom templates.
-  */
+   * Directory of custom templates.
+   */
   styleTemplates?: string;
   /**
    * unicode start number
@@ -110,7 +129,11 @@ export type SvgToFontOptions = {
    */
   startUnicode?: number;
   /** Get Icon Unicode */
-  getIconUnicode?: (name: string, unicode: string, startUnicode: number) => [string, number];
+  getIconUnicode?: (
+    name: string,
+    unicode: string,
+    startUnicode: number
+  ) => [string, number];
   /**
    * should the name(file name) be used as unicode? this switch allows for the support of ligatures.
    * @default false
@@ -132,9 +155,11 @@ export type SvgToFontOptions = {
   svg2ttf?: FontOptions;
   /**
    * You can configure which font files to exclude from generation. By default, all font files will be generated.
-   * https://github.com/jaywcjlove/svgtofont/issues/238
+   * https://github.com/gaubee/icon-bundler/issues/238
    */
-  excludeFormat?: Array<"eot" | "woff" | "woff2" | "ttf" | "svg" | "symbol.svg">;
+  excludeFormat?: Array<
+    "eot" | "woff" | "woff2" | "ttf" | "svg" | "symbol.svg"
+  >;
   website?: {
     /**
      * Add a Github corner to your website
@@ -142,26 +167,26 @@ export type SvgToFontOptions = {
      */
     corners?: {
       /**
-       * @example `https://github.com/jaywcjlove/svgtofont`
+       * @example `https://github.com/gaubee/icon-bundler`
        */
-      url?: string,
+      url?: string;
       /**
        * @default 60
        */
-      width?: number,
+      width?: number;
       /**
        * @default 60
        */
-      height?: number,
+      height?: number;
       /**
        * @default #151513
        */
-      bgColor?: '#dc3545'
-    },
+      bgColor?: "#dc3545";
+    };
     /**
      * @default unicode
      */
-    index?: 'font-class' | 'unicode' | 'symbol';
+    index?: "font-class" | "unicode" | "symbol";
     /**
      * website title
      */
@@ -180,14 +205,17 @@ export type SvgToFontOptions = {
      * path.resolve(rootPath, "svg", "git.svg")
      * ```
      */
-    logo?: string,
-    version?: string,
+    logo?: string;
+    version?: string;
     meta?: {
       description?: string;
       keywords?: string;
-    },
+    };
     description?: string;
-    template?: string;
+    template?:
+      | WebsiteTemplate
+      | Promise<{ default: WebsiteTemplate }>
+      | Promise<WebsiteTemplate>;
     footerInfo?: string;
     links: Array<{
       title: string;
@@ -199,8 +227,8 @@ export type SvgToFontOptions = {
    * Create typescript file with declarations for icon classnames
    * @default false
    */
-  typescript?: boolean | TypescriptOptions
-}
+  typescript?: boolean | TypescriptOptions;
+};
 
 export type IconInfo = {
   prefix: string;
@@ -208,12 +236,12 @@ export type IconInfo = {
   unicode: string;
   className: string;
   encodedCode: string | number;
-}
-export type InfoData = Record<string, Partial<IconInfo>>
+};
+export type InfoData = Record<string, Partial<IconInfo>>;
 
-const loadConfig = async (options: SvgToFontOptions): Promise<SvgToFontOptions> => {
+const loadConfig = async <T extends SvgToFontOptions>(options: T) => {
   const defaultOptions = getDefaultOptions(options);
-  const data = autoConf<SvgToFontOptions>('svgtofont', {
+  const data = await autoConf<SvgToFontOptions>("icon-bundler", {
     mustExist: true,
     default: defaultOptions,
     ...options.config,
@@ -221,15 +249,15 @@ const loadConfig = async (options: SvgToFontOptions): Promise<SvgToFontOptions> 
   return merge(defaultOptions, data);
 };
 
-const handlePkgConfig = (options: SvgToFontOptions): SvgToFontOptions => {
-  const pkgPath = path.join(process.cwd(), 'package.json');
+const handlePkgConfig = <T extends SvgToFontOptions>(options: T): T => {
+  const pkgPath = path.join(process.cwd(), "package.json");
   if (fs.pathExistsSync(pkgPath)) {
     const pkg = fs.readJSONSync(pkgPath);
-    if (pkg.svgtofont) {
+    if (pkg.iconBundler) {
       const cssOptions = options.css;
-      options = merge(options, pkg.svgtofont);
-      if (pkg.svgtofont.css && cssOptions && typeof cssOptions === 'object') {
-        options.css = merge(cssOptions, pkg.svgtofont.css);
+      options = merge(options, pkg.iconBundler);
+      if (pkg.iconBundler.css && cssOptions && typeof cssOptions === "object") {
+        options.css = merge(cssOptions, pkg.iconBundler.css);
       }
     }
     if (options.website && pkg.version) {
@@ -239,24 +267,29 @@ const handlePkgConfig = (options: SvgToFontOptions): SvgToFontOptions => {
   return options;
 };
 
-export default async (options: SvgToFontOptions = {}) => {
-  options = await loadConfig(options);
-  options = handlePkgConfig(options);
+export default async (_options: SvgToFontOptions = {}) => {
+  const options = handlePkgConfig(await loadConfig(_options));
   if (options.log === undefined) options.log = true;
   log.disabled = !options.log;
-  if (options.logger && typeof options.logger === 'function') log.logger = options.logger;
+  if (options.logger && typeof options.logger === "function")
+    log.logger = options.logger;
 
   options.svgicons2svgfont.fontName = options.fontName;
   options.classNamePrefix = options.classNamePrefix || options.fontName;
 
   const excludeFormat = options.excludeFormat || [];
 
-  const fontSizeOpt = typeof options.css !== 'boolean' && options.css.fontSize;
-  const fontSize = typeof fontSizeOpt === 'boolean' ? (fontSizeOpt === true ? 'font-size: 16px;' : '') : `font-size: ${fontSizeOpt};`;
+  const fontSizeOpt = typeof options.css !== "boolean" && options.css?.fontSize;
+  const fontSize =
+    typeof fontSizeOpt === "boolean"
+      ? fontSizeOpt === true
+        ? "font-size: 16px;"
+        : ""
+      : `font-size: ${fontSizeOpt};`;
   // If you generate a font you need to generate a style.
   if (options.website && !options.css) options.css = true;
 
-  const infoDataPath = path.resolve(options.dist, 'info.json');
+  const infoDataPath = path.resolve(options.dist, "info.json");
   try {
     if (options.emptyDist) {
       await fs.emptyDir(options.dist);
@@ -273,36 +306,52 @@ export default async (options: SvgToFontOptions = {}) => {
     let unicodeHtml: string[] = [];
     let symbolHtml: string[] = [];
     const prefix = options.classNamePrefix || options.fontName;
-    const infoData: InfoData = {}
+    const infoData: InfoData = {};
 
     Object.keys(unicodeObject).forEach((name, index, self) => {
       if (!infoData[name]) infoData[name] = {};
       const _code = unicodeObject[name];
-      let symbolName = options.classNamePrefix + options.symbolNameDelimiter + name
+      let symbolName =
+        options.classNamePrefix + options.symbolNameDelimiter + name;
       let iconPart = symbolName + '">';
       let encodedCodes: string | number = _code.charCodeAt(0);
 
       if (options.useNameAsUnicode) {
         symbolName = name;
         iconPart = prefix + '">' + name;
-        encodedCodes = _code.split('').map(x => x.charCodeAt(0)).join(';&amp;#');
+        encodedCodes = _code
+          .split("")
+          .map((x) => x.charCodeAt(0))
+          .join(";&amp;#");
       } else {
         cssToVars.push(`$${symbolName}: "\\${encodedCodes.toString(16)}";\n`);
         if (options.useCSSVars) {
-          if (index === 0) cssRootVars.push(`:root {\n`)
-          cssRootVars.push(`--${symbolName}: "\\${encodedCodes.toString(16)}";\n`);
-          cssString.push(`.${symbolName}:before { content: var(--${symbolName}); }\n`);
-          if (index === self.length - 1) cssRootVars.push(`}\n`)
+          if (index === 0) cssRootVars.push(`:root {\n`);
+          cssRootVars.push(
+            `--${symbolName}: "\\${encodedCodes.toString(16)}";\n`
+          );
+          cssString.push(
+            `.${symbolName}:before { content: var(--${symbolName}); }\n`
+          );
+          if (index === self.length - 1) cssRootVars.push(`}\n`);
         } else {
-          cssString.push(`.${symbolName}:before { content: "\\${encodedCodes.toString(16)}"; }\n`);
+          cssString.push(
+            `.${symbolName}:before { content: "\\${encodedCodes.toString(
+              16
+            )}"; }\n`
+          );
         }
       }
       infoData[name].encodedCode = `\\${encodedCodes.toString(16)}`;
       infoData[name].prefix = prefix;
       infoData[name].className = symbolName;
       infoData[name].unicode = `&#${encodedCodes};`;
-      cssIconHtml.push(`<li class="class-icon"><i class="${iconPart}</i><p class="name">${name}</p></li>`);
-      unicodeHtml.push(`<li class="unicode-icon"><span class="iconfont">${_code}</span><h4>${name}</h4><span class="unicode">&amp;#${encodedCodes};</span></li>`);
+      cssIconHtml.push(
+        `<li class="class-icon"><i class="${iconPart}</i><p class="name">${name}</p></li>`
+      );
+      unicodeHtml.push(
+        `<li class="unicode-icon"><span class="iconfont">${_code}</span><h4>${name}</h4><span class="unicode">&amp;#${encodedCodes};</span></li>`
+      );
       symbolHtml.push(`
         <li class="symbol">
           <svg class="icon" aria-hidden="true">
@@ -314,134 +363,156 @@ export default async (options: SvgToFontOptions = {}) => {
     });
 
     if (options.useCSSVars) {
-      cssString = [...cssRootVars, ...cssString]
+      cssString = [...cssRootVars, ...cssString];
     }
 
     if (options.generateInfoData) {
       await fs.writeJSON(infoDataPath, infoData, { spaces: 2 });
-      log.log(`${color.green('SUCCESS')} Created ${infoDataPath} `);
+      log.log(`${color.green("SUCCESS")} Created ${infoDataPath} `);
     }
 
     const ttf = await createTTF(options);
-    if (!excludeFormat.includes('eot')) await createEOT(options, ttf);
-    if (!excludeFormat.includes('woff')) await createWOFF(options, ttf);
-    if (!excludeFormat.includes('woff2')) await createWOFF2(options, ttf);
-    if (!excludeFormat.includes('symbol.svg')) await createSvgSymbol(options);
+    if (!excludeFormat.includes("eot")) await createEOT(options, ttf);
+    if (!excludeFormat.includes("woff")) await createWOFF(options, ttf);
+    if (!excludeFormat.includes("woff2")) await createWOFF2(options, ttf);
+    if (!excludeFormat.includes("symbol.svg")) await createSvgSymbol(options);
 
     const ttfPath = path.join(options.dist, options.fontName + ".ttf");
-    if (excludeFormat.includes('ttf')) {
+    if (excludeFormat.includes("ttf")) {
       fs.removeSync(ttfPath);
     }
     const svgPath = path.join(options.dist, options.fontName + ".svg");
-    if (excludeFormat.includes('svg')) {
-      fs.removeSync(svgPath)
+    if (excludeFormat.includes("svg")) {
+      fs.removeSync(svgPath);
     }
 
     if (options.css) {
-      const styleTemplatePath = options.styleTemplates || path.resolve(__dirname, 'styles')
-      const outDir = typeof options.css === 'object' ? options.css.output || options.dist : options.dist;
-      const hasTimestamp = typeof options.css === 'object' ? options.css.hasTimestamp : true;
+      const styleTemplatePath =
+        options.styleTemplates || path.resolve(__dirname, "styles");
+      const outDir =
+        typeof options.css === "object"
+          ? options.css.output || options.dist
+          : options.dist;
+      const hasTimestamp =
+        typeof options.css === "object" ? options.css.hasTimestamp : true;
 
-      const cssOptions = typeof options.css === 'object' ? options.css : {};
-      const fontFamilyString = generateFontFaceCSS(options.fontName, cssOptions.cssPath || "", Date.now(), excludeFormat, hasTimestamp);
+      const cssOptions = typeof options.css === "object" ? options.css : {};
+      const fontFamilyString = generateFontFaceCSS(
+        options.fontName,
+        cssOptions.cssPath || "",
+        Date.now(),
+        excludeFormat,
+        hasTimestamp
+      );
 
       await copyTemplate(styleTemplatePath, outDir, {
         fontname: options.fontName,
-        cssString: cssString.join(''),
-        cssToVars: cssToVars.join(''),
+        cssString: cssString.join(""),
+        cssToVars: cssToVars.join(""),
         infoData,
         fontSize: fontSize,
         timestamp: new Date().getTime(),
         prefix,
         fontFamily: fontFamilyString,
         nameAsUnicode: options.useNameAsUnicode,
-        _opts: cssOptions
+        _opts: cssOptions,
       });
     }
 
     if (options.typescript) {
-      await createTypescript({ ...options, typescript: options.typescript })
+      await createTypescript({ ...options, typescript: options.typescript });
     }
 
-    if (options.website) {
-      const pageNames = ['font-class', 'unicode', 'symbol'];
+    const { website } = options;
+    if (website) {
+      const pageNames = ["font-class", "unicode", "symbol"];
       const htmlPaths: Record<string, string> = {};
       // setting default home page.
-      const indexName = pageNames.includes(options.website.index) ? options.website.index : 'font-class';
-      pageNames.forEach(name => {
-          const fileName = name === indexName ? 'index.html' : `${name}.html`;
-          htmlPaths[name] = path.join(options.dist, fileName);
+      const indexName = pageNames.includes(website.index ?? "")
+        ? website.index
+        : "font-class";
+      pageNames.forEach((name) => {
+        const fileName = name === indexName ? "index.html" : `${name}.html`;
+        htmlPaths[name] = path.join(options.dist, fileName);
       });
-      const fontClassPath = htmlPaths['font-class'];
-      const unicodePath = htmlPaths['unicode'];
-      const symbolPath = htmlPaths['symbol'];
+      const fontClassPath = htmlPaths["font-class"];
+      const unicodePath = htmlPaths["unicode"];
+      const symbolPath = htmlPaths["symbol"];
 
       // default template
-      options.website.template = options.website.template || path.join(__dirname, 'website', 'index.njk');
+      website.template = website.template || import("./website/index.tsx");
       // template data
-      const tempData: SvgToFontOptions['website'] & {
-        fontname: string;
-        classNamePrefix: string;
-        _type: string;
-        _link: string;
-        _IconHtml: string;
-        _title: string;
-      } = {
-        meta: null,
-        links: null,
-        corners: null,
-        description: null,
-        footerInfo: null,
-        ...options.website,
-        fontname: options.fontName,
-        classNamePrefix: options.classNamePrefix,
-        _type: 'font-class',
-        _link: `${(options.css && typeof options.css !== 'boolean' && options.css.fileName) || options.fontName}.css`,
-        _IconHtml: cssIconHtml.join(''),
-        _title: options.website.title || options.fontName
+      const tempData: IconPageProps = {
+        ...{
+          meta: undefined,
+          links: [],
+          corners: undefined,
+          description: undefined,
+          footerInfo: undefined,
+          fontname: options.fontName,
+          classNamePrefix: options.classNamePrefix,
+          _type: "font-class",
+          _link: `${
+            (options.css &&
+              typeof options.css !== "boolean" &&
+              options.css.fileName) ||
+            options.fontName
+          }.css`,
+          _IconHtml: cssIconHtml.join(""),
+          _title: website.title || options.fontName,
+        },
+        ...website,
       };
       // website logo
-      if (options.website.logo && fs.pathExistsSync(options.website.logo) && path.extname(options.website.logo) === '.svg') {
-        tempData.logo = fs.readFileSync(options.website.logo).toString();
+      if (
+        website.logo &&
+        fs.pathExistsSync(website.logo) &&
+        path.extname(website.logo) === ".svg"
+      ) {
+        tempData.logo = fs.readFileSync(website.logo).toString();
       }
       // website favicon
-      if (options.website.favicon && fs.pathExistsSync(options.website.favicon)) {
-        tempData.favicon = await image2uri(options.website.favicon);
+      if (website.favicon && fs.pathExistsSync(website.favicon)) {
+        tempData.favicon = await image2uri(website.favicon);
       } else {
-        tempData.favicon = '';
+        tempData.favicon = "";
       }
-      const classHtmlStr = await createHTML(options.website.template, tempData);
+      const template = match(await website.template)
+        .with({ default: P.select() }, (tempFn) => tempFn)
+        .otherwise((tempFn) => tempFn);
+
+      const classHtmlStr = await createHTML(template, tempData);
       fs.outputFileSync(fontClassPath, classHtmlStr);
-      log.log(`${color.green('SUCCESS')} Created ${fontClassPath} `);
+      log.log(`${color.green("SUCCESS")} Created ${fontClassPath} `);
 
-      tempData._IconHtml = unicodeHtml.join('');
-      tempData._type = 'unicode';
-      const unicodeHtmlStr = await createHTML(options.website.template, tempData);
+      tempData._IconHtml = unicodeHtml.join("");
+      tempData._type = "unicode";
+      const unicodeHtmlStr = await createHTML(template, tempData);
       fs.outputFileSync(unicodePath, unicodeHtmlStr);
-      log.log(`${color.green('SUCCESS')} Created ${unicodePath} `);
+      log.log(`${color.green("SUCCESS")} Created ${unicodePath} `);
 
-      tempData._IconHtml = symbolHtml.join('');
-      tempData._type = 'symbol';
-      const symbolHtmlStr = await createHTML(options.website.template, tempData);
+      tempData._IconHtml = symbolHtml.join("");
+      tempData._type = "symbol";
+      const symbolHtmlStr = await createHTML(template, tempData);
       fs.outputFileSync(symbolPath, symbolHtmlStr);
-      log.log(`${color.green('SUCCESS')} Created ${symbolPath} `);
+      log.log(`${color.green("SUCCESS")} Created ${symbolPath} `);
     }
 
     if (options.outSVGPath) {
       const outPath = await generateIconsSource(options);
-      log.log(`${color.green('SUCCESS')} Created ${outPath} `);
+      log.log(`${color.green("SUCCESS")} Created ${outPath} `);
     }
     if (options.outSVGReact) {
       const outPath = await generateReactIcons(options);
-      log.log(`${color.green('SUCCESS')} Created React Components. `);
+      log.log(`${color.green("SUCCESS")} Created React Components. `);
     }
     if (options.outSVGReactNative) {
       generateReactNativeIcons(options, unicodeObject);
-      log.log(`${color.green('SUCCESS')} Created React Native Components. `);
+      log.log(`${color.green("SUCCESS")} Created React Native Components. `);
     }
 
     return infoData;
   } catch (error) {
-    log.log('SvgToFont:CLI:ERR:', error);
+    log.log("SvgToFont:CLI:ERR:", error);
   }
-}
+};
