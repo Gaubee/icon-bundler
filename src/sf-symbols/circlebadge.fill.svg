@@ -3,9 +3,9 @@
 <!DOCTYPE svg
 PUBLIC "-//W3C//DTD SVG 1.1//EN"
        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 15.3223 14.9707">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 21.3008 20.959">
  <g>
-  <rect height="14.9707" opacity="0" width="15.3223" x="0" y="0"/>
-  <path d="M7.48047 14.9609C11.6016 14.9609 14.9609 11.6016 14.9609 7.48047C14.9609 3.34961 11.6016 0 7.48047 0C3.34961 0 0 3.34961 0 7.48047C0 11.6016 3.34961 14.9609 7.48047 14.9609Z" fill="black" fill-opacity="0.85"/>
+  <rect height="20.959" opacity="0" width="21.3008" x="0" y="0"/>
+  <path d="M10.4727 20.9453C16.2422 20.9453 20.9453 16.2422 20.9453 10.4727C20.9453 4.68945 16.2422 0 10.4727 0C4.68945 0 0 4.68945 0 10.4727C0 16.2422 4.68945 20.9453 10.4727 20.9453Z" fill="#0a84ff"/>
  </g>
 </svg>
