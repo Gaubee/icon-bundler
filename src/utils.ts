@@ -9,7 +9,7 @@ import nunjucks from "nunjucks";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import svg2ttf from "svg2ttf";
-import { SVGIcons2SVGFontStream } from "svgicons2svgfont";
+import { SVGIcons2SVGFontStream } from "./svgicons2svgfont/index.ts";
 import ttf2eot from "ttf2eot";
 import ttf2woff from "ttf2woff";
 import ttf2woff2 from "ttf2woff2";

@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "fs-extra";
 import image2uri from "image2uri";
-import { type SVGIcons2SVGFontStreamOptions } from "svgicons2svgfont";
+import { type SVGIcons2SVGFontStreamOptions } from "./svgicons2svgfont/index.ts";
 import color from "colors-cli";
 import { autoConf, merge, type AutoConfOption } from "auto-config-loader";
 import type { FontOptions } from "svg2ttf";
