@@ -2,7 +2,6 @@ import iconBundler from "../../src/index.ts";
 import path from "node:path";
 import fs from "node:fs";
 import process from "node:process";
-import { map_get_or_put } from "@gaubee/util";
 
 import packageJson from "../../package.json" with { type: "json" };
 
@@ -23,55 +22,38 @@ const resolveDir = createResolveTo(import.meta.dirname);
   fs.mkdirSync(tmpSrc, { recursive: true });
 
   let count = 0;
-  const multiLayerColors = new Map<string, number>();
-  for (const name of fs.readdirSync(sourceDir)) {
-    if (name.endsWith(".svg")) {
-      const targetName = name.replaceAll(".", "_").replace(/_svg$/, ".svg");
-      const svgCode = fs.readFileSync(path.join(sourceDir, name), "utf-8");
-      fs.writeFileSync(
-        path.join(tmpSrc, targetName),
-        svgCode
-          .replace(/<\?xml [\w\W]+?svg11.dtd">/, "")
-          .replace(/fill="(.+?)"/g, (fillAttr, color) => {
-            const colorIndex = map_get_or_put(
-              multiLayerColors,
-              color,
-              () => multiLayerColors.size,
-            );
-            return `style="fill:var(--color-${colorIndex}, ${colorIndex === 0 ? "currentColor" : color})"`;
-          })
-          .replace(/<rect [^>]+?><\/rect>/, (rect) => {
-            if (rect.includes('opacity="0"')) {
-              return "";
-            }
-            return rect;
-          })
-          .replace(/<rect [^>]+?\/>/, (rect) => {
-            if (rect.includes('opacity="0"')) {
-              return "";
-            }
-            return rect;
-          }),
-      );
-      count++;
-    }
-    if (count > 1000) {
+  const allNames = fs
+    .readdirSync(sourceDir)
+    .filter((name) => name.endsWith(".svg"))
+    .sort((a, b) => a.localeCompare(b));
+
+  for (const name of ["rainbow.svg", "character_book_closed.svg"]) {
+    count++;
+    const targetName = name.replaceAll(".", "_").replace(/_svg$/, ".svg");
+    fs.copyFileSync(
+      path.join(sourceDir, targetName),
+      path.join(tmpSrc, targetName),
+    );
+    if (count >= 2) {
       break;
     }
   }
-  console.log("multiLayerColors", multiLayerColors);
 
   const fontData = await iconBundler({
     src: tmpSrc, // svg path
     dist: resolveDir("dist"), // output path
     fontName: "sficons", // font name
-    css: true, // Create CSS files.
+    // css: true, // Create CSS files.
     // outSVGPath: true,
-    useNameAsUnicode: true,
+    excludeFormat: ["eot", "woff", "ttf"],
+    useNameAsUnicode: false,
     emptyDist: true,
     svgicons2svgfont: {
-      // centerVertically: true,
-      // centerHorizontally: true,
+      usePathBounds: false,
+      normalize: false,
+      fontHeight: 30,
+      centerVertically: true,
+      centerHorizontally: true,
     },
     website: {
       title: "Icons Bundler",

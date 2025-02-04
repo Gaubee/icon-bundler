@@ -72,28 +72,16 @@ const IconPage: WebsiteTemplate = ({
         () => css`
           .icons ul li.class-icon {
             font-size: 48px;
-            line-height: 48px;
-          }
-          .icons ul li.class-icon [class^="${classNamePrefix}-"] {
-            font-size: 26px;
+            line-height: 1;
           }
         `,
       )
       .with(
         "unicode",
         () => css`
-          @font-face {
-            font-family: "${fontname}";
-            src:
-              url(${fontname}.woff2) format("woff2"),
-              url(${fontname}.svg#${fontname}) format("svg");
-          }
           .${classNamePrefix} {
-            font: 36px/1 "${fontname}";
-            font-style: normal;
-            -webkit-font-smoothing: antialiased;
-            -webkit-text-stroke-width: 0.2px;
-            -moz-osx-font-smoothing: grayscale;
+            font-size: 48px;
+            line-height: 1;
           }
         `,
       )
@@ -161,7 +149,7 @@ const IconPage: WebsiteTemplate = ({
           <meta key={k} name={k} content={v} />
         ))}
         {favicon && <link rel="icon" type="image/x-icon" href={favicon} />}
-        {_type === "font-class" && _link && (
+        {(_type === "font-class" || _type === "unicode") && _link && (
           <link rel="stylesheet" href={_link} />
         )}
         <style dangerouslySetInnerHTML={{ __html: dynamicStyles.join("\n") }} />
@@ -229,7 +217,7 @@ const IconPage: WebsiteTemplate = ({
         </p>
 
         <div className="footer">
-          {footerInfo}
+          <div dangerouslySetInnerHTML={{ __html: footerInfo }}></div>
           <div>
             <a target="_blank" href="https://github.com/gaubee/icon-bundler">
               Created By icon-bundler
@@ -237,8 +225,35 @@ const IconPage: WebsiteTemplate = ({
           </div>
         </div>
       </body>
+      <script>{bindCopyToolTipCode}</script>
     </html>
   );
 };
+
+const bindCopyToolTip = () => {
+  const iconsEle = document.querySelector(".icons");
+  iconsEle.addEventListener("click", (e) => {
+    let ele = e.target;
+    while (true) {
+      if (!(ele instanceof Element) || ele === iconsEle) {
+        return;
+      }
+      if (ele instanceof HTMLElement && "copy" in ele.dataset) {
+        const copy = ele.dataset.copy;
+        ele.removeAttribute("data-copy");
+        const copyContent = copy || ele.outerHTML.trim();
+        navigator.clipboard.writeText(copyContent);
+        ele.setAttribute("data-copy", copy);
+        console.log(copyContent);
+        break;
+      }
+      ele = ele.parentElement;
+    }
+  });
+};
+let bindCopyToolTipCode = bindCopyToolTip.toString();
+bindCopyToolTipCode = bindCopyToolTipCode
+  .slice(bindCopyToolTipCode.indexOf("{") + 1, -1)
+  .trim();
 
 export default IconPage;

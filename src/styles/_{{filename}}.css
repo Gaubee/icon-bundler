@@ -2,17 +2,16 @@
 {{fontFamily}}
 }
 
-{% if nameAsUnicode %}.{{prefix}}{% else %}[class^="{{prefix}}-"], [class*=" {{prefix}}-"]{% endif %} {
-  font-family: '{{fontname}}' !important;{{fontSize}}
+.{{prefix}} {
+  font-family: {{fontSize}} '{{fontname}}' !important;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.{{prefix}}::before {
+  content: var(--icon-code, attr(data-icon));
 }
 
 {% if not nameAsUnicode %}
 {{cssString}}
 {% endif %}
-
-.{{prefix}}::before {
-  content: var(--icon-name, attr(data-icon));
-}

@@ -391,10 +391,10 @@ export function generateFontFaceCSS(
         : undefined;
   const formats = [
     { ext: "eot", format: "embedded-opentype", ieFix: true },
+    { ext: "svg", format: "svg" },
     { ext: "woff2", format: "woff2" },
     { ext: "woff", format: "woff" },
     { ext: "ttf", format: "truetype" },
-    { ext: "svg", format: "svg" },
   ];
   let cssString = `  font-family: "${fontName}";\n`;
   if (!excludeFormat.includes("eot")) {
@@ -428,7 +428,8 @@ export const getDefaultOptions = <T extends SvgToFontOptions>(options: T) => {
       svg2ttf: {},
       svgicons2svgfont: {
         fontName: "iconfont",
-        fontHeight: 1000,
+        fontHeight: 800,
+        normalize: true,
       },
       fontName: "iconfont",
       symbolNameDelimiter: "-",

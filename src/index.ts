@@ -348,7 +348,7 @@ export default async (_options: SvgToFontOptions = {}) => {
       //   );
       // }
       cssString.push(
-        `[data-${name}] { --icon-name: "\\${encodedCodes.toString(16)}"; }\n`,
+        `[data-icon="${name}"] { --icon-code: "\\${encodedCodes.toString(16)}"; }\n`,
       );
 
       infoData[name].encodedCode = `\\${encodedCodes.toString(16)}`;
@@ -357,19 +357,19 @@ export default async (_options: SvgToFontOptions = {}) => {
       infoData[name].unicode = `&#${encodedCodes};`;
       cssIconHtml.push(
         html`<li class="class-icon">
-          <i class="${prefix}" data-icon="${name}"></i>
+          <i class="${prefix}" data-icon="${name}" data-copy></i>
           <tool-tip class="name">${name}</tool-tip>
         </li>`,
       );
       unicodeHtml.push(
         html`<li class="unicode-icon">
-          <span class="${options.fontName}">${_code}</span>
+          <span class="${options.fontName}" data-copy>${_code}</span>
           <tool-tip class="name">${name}</tool-tip>
         </li>`,
       );
       symbolHtml.push(html`
         <li class="symbol">
-          <svg class="icon" aria-hidden="true">
+          <svg class="icon" aria-hidden="true" data-copy>
             <use xlink:href="${options.fontName}.symbol.svg#${name}"></use>
           </svg>
           <tool-tip class="name">${name}</tool-tip>
