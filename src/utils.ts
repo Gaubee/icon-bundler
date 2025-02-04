@@ -28,7 +28,7 @@ let startUnicode = 0xea01;
  * SVG to SVG font
  */
 export function createSVG(
-  options: SafeSvgToFontOptions
+  options: SafeSvgToFontOptions,
 ): Promise<Record<string, string>> {
   startUnicode = options.startUnicode ?? startUnicode;
   UnicodeObj = {};
@@ -74,8 +74,8 @@ export function createSVG(
     .on("finish", () => {
       log.log(
         `${color.green("SUCCESS")} ${color.blue_bt(
-          "SVG"
-        )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`
+          "SVG",
+        )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`,
       );
       job.resolve(UnicodeObj);
     })
@@ -152,14 +152,14 @@ export type TypescriptOptions = {
 export async function createTypescript(
   options: Omit<SafeSvgToFontOptions, "typescript"> & {
     typescript: TypescriptOptions | true;
-  }
+  },
 ) {
   const tsOptions = options.typescript === true ? {} : options.typescript;
   const uppercaseFontName = snakeToUppercase(options.fontName);
   const { extension = "d.ts", enumName = uppercaseFontName } = tsOptions;
   const DIST_PATH = path.join(options.dist, `${options.fontName}.${extension}`);
   const fileNames = filterSvgFiles(options.src).map((svgPath) =>
-    path.basename(svgPath, path.extname(svgPath))
+    path.basename(svgPath, path.extname(svgPath)),
   );
   await fs.promises.writeFile(
     DIST_PATH,
@@ -167,7 +167,7 @@ export async function createTypescript(
       `export enum ${enumName} {`,
       ...fileNames.map(
         (name) =>
-          `  ${snakeToUppercase(name)} = "${options.classNamePrefix}-${name}",`
+          `  ${snakeToUppercase(name)} = "${options.classNamePrefix}-${name}",`,
       ),
       "}",
       `export type ${enumName}Classname = ${fileNames
@@ -177,7 +177,7 @@ export async function createTypescript(
         .map((name) => `"${name}"`)
         .join(" | ")}`,
       `export const ${enumName}Prefix = "${options.classNamePrefix}-"`,
-    ].join("\n")
+    ].join("\n"),
   );
   log.log(`${color.green("SUCCESS")} Created ${DIST_PATH}`);
 }
@@ -186,13 +186,13 @@ export async function createTypescript(
  * SVG font to TTF
  */
 export async function createTTF(
-  options: SafeSvgToFontOptions
+  options: SafeSvgToFontOptions,
 ): Promise<Buffer> {
   options.svg2ttf = options.svg2ttf || {};
   const DIST_PATH = path.join(options.dist, options.fontName + ".ttf");
   const ttf = svg2ttf(
     fs.readFileSync(path.join(options.dist, options.fontName + ".svg"), "utf8"),
-    options.svg2ttf
+    options.svg2ttf,
   );
   const ttfBuf = Buffer.from(ttf.buffer);
   await fs.promises.writeFile(DIST_PATH, ttfBuf);
@@ -210,8 +210,8 @@ export async function createEOT(options: SafeSvgToFontOptions, ttf: Buffer) {
 
   log.log(
     `${color.green("SUCCESS")} ${color.blue_bt(
-      "EOT"
-    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`
+      "EOT",
+    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`,
   );
   return eot;
 }
@@ -225,8 +225,8 @@ export async function createWOFF(options: SafeSvgToFontOptions, ttf: Buffer) {
   await fs.promises.writeFile(DIST_PATH, woff);
   log.log(
     `${color.green("SUCCESS")} ${color.blue_bt(
-      "WOFF"
-    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`
+      "WOFF",
+    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`,
   );
   return woff;
 }
@@ -240,8 +240,8 @@ export async function createWOFF2(options: SafeSvgToFontOptions, ttf: Buffer) {
   await fs.promises.writeFile(DIST_PATH, woff2);
   log.log(
     `${color.green("SUCCESS")} ${color.blue_bt(
-      "WOFF2"
-    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`
+      "WOFF2",
+    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`,
   );
   return {
     path: DIST_PATH,
@@ -253,20 +253,28 @@ export async function createWOFF2(options: SafeSvgToFontOptions, ttf: Buffer) {
  */
 export async function createSvgSymbol(options: SafeSvgToFontOptions) {
   const DIST_PATH = path.join(options.dist, `${options.fontName}.symbol.svg`);
+  const html = String.raw;
   const $ = load(
-    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" style="display:none;"></svg>'
+    html`<svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      width="0"
+      height="0"
+      style="display:none;"
+    ></svg>`,
   );
+  const rootSvg = $("svg");
   filterSvgFiles(options.src).forEach((svgPath) => {
     const fileName = path.basename(svgPath, path.extname(svgPath));
     const fileContent = fs.readFileSync(svgPath, "utf8");
-    const svgNode = $(fileContent);
+    const svgNode = load(fileContent)("svg");
     const svgContent = svgNode.html();
     if (svgContent) {
       const symbolNode = $("<symbol></symbol>");
       symbolNode.attr("viewBox", svgNode.attr("viewBox"));
-      symbolNode.attr("id", `${options.classNamePrefix}-${fileName}`);
+      symbolNode.attr("id", fileName);
       symbolNode.append(svgContent);
-      $("svg").append(symbolNode);
+      rootSvg.append(symbolNode);
     }
   });
 
@@ -274,8 +282,8 @@ export async function createSvgSymbol(options: SafeSvgToFontOptions) {
 
   log.log(
     `${color.green("SUCCESS")} ${color.blue_bt(
-      "Svg Symbol"
-    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`
+      "Svg Symbol",
+    )} font successfully created!\n  ╰┈▶ ${DIST_PATH}`,
   );
   return {
     path: DIST_PATH,
@@ -327,7 +335,7 @@ const safeNunjucks = nunjucks.configure({ autoescape: false });
 export async function copyTemplate(
   inDir: string,
   outDir: string,
-  { _opts, ...vars }: Record<string, any> & { _opts: CSSOptions }
+  { _opts, ...vars }: Record<string, any> & { _opts: CSSOptions },
 ) {
   const files = await fs.readdir(inDir, { withFileTypes: true });
   const context = {
@@ -344,7 +352,7 @@ export async function copyTemplate(
     for (const key in context)
       newFileName = newFileName.replaceAll(
         `{{${key}}}`,
-        `${context[key as keyof typeof context]}`
+        `${context[key as keyof typeof context]}`,
       );
     const template = await fs.readFile(path.join(inDir, file.name), "utf8");
     const content = safeNunjucks.renderString(template, context);
@@ -360,11 +368,11 @@ export async function copyTemplate(
 export function createHTML(
   template: WebsiteTemplate,
   props: IconPageProps,
-  options?: ReactDOMServer.ServerOptions
+  options?: ReactDOMServer.ServerOptions,
 ): string {
   return ReactDOMServer.renderToStaticMarkup(
     React.createElement(template, props),
-    options
+    options,
   );
 }
 
@@ -373,14 +381,14 @@ export function generateFontFaceCSS(
   cssPath: string,
   timestamp: number,
   excludeFormat: string[],
-  hasTimestamp: boolean | string = true
+  hasTimestamp: boolean | string = true,
 ): string {
   const timestamString =
     hasTimestamp === true
       ? `?t=${timestamp}`
       : typeof hasTimestamp == "string"
-      ? `?t=${hasTimestamp}`
-      : undefined;
+        ? `?t=${hasTimestamp}`
+        : undefined;
   const formats = [
     { ext: "eot", format: "embedded-opentype", ieFix: true },
     { ext: "woff2", format: "woff2" },
@@ -420,11 +428,12 @@ export const getDefaultOptions = <T extends SvgToFontOptions>(options: T) => {
       svg2ttf: {},
       svgicons2svgfont: {
         fontName: "iconfont",
+        fontHeight: 1000,
       },
       fontName: "iconfont",
       symbolNameDelimiter: "-",
-    },
-    options
+    } satisfies SvgToFontOptions,
+    options,
   );
 };
 export type SafeSvgToFontOptions = Awaited<

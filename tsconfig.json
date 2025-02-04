@@ -14,11 +14,16 @@
     "strict": false,
     "skipLibCheck": true,
     "outDir": "lib",
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "jsx": "react",
     "baseUrl": "."
   },
   "include": [
-    "src/**/*"
-, "test/index.test.mjs", "test/index.test.js"  ],
+    "src/**/*",
+    "test/index.test.mjs",
+    "test/index.test.js"
+  ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",

@@ -132,7 +132,7 @@ export type SvgToFontOptions = {
   getIconUnicode?: (
     name: string,
     unicode: string,
-    startUnicode: number
+    startUnicode: number,
   ) => [string, number];
   /**
    * should the name(file name) be used as unicode? this switch allows for the support of ligatures.
@@ -307,57 +307,72 @@ export default async (_options: SvgToFontOptions = {}) => {
     let symbolHtml: string[] = [];
     const prefix = options.classNamePrefix || options.fontName;
     const infoData: InfoData = {};
+    const html = String.raw;
 
     Object.keys(unicodeObject).forEach((name, index, self) => {
       if (!infoData[name]) infoData[name] = {};
       const _code = unicodeObject[name];
       let symbolName =
         options.classNamePrefix + options.symbolNameDelimiter + name;
-      let iconPart = symbolName + '">';
+      // let iconPart = symbolName + '">';
       let encodedCodes: string | number = _code.charCodeAt(0);
 
       if (options.useNameAsUnicode) {
-        symbolName = name;
-        iconPart = prefix + '">' + name;
+        // symbolName = name;
+        // iconPart = prefix + '">' + name;
         encodedCodes = _code
           .split("")
           .map((x) => x.charCodeAt(0))
           .join(";&amp;#");
-      } else {
-        cssToVars.push(`$${symbolName}: "\\${encodedCodes.toString(16)}";\n`);
-        if (options.useCSSVars) {
-          if (index === 0) cssRootVars.push(`:root {\n`);
-          cssRootVars.push(
-            `--${symbolName}: "\\${encodedCodes.toString(16)}";\n`
-          );
-          cssString.push(
-            `.${symbolName}:before { content: var(--${symbolName}); }\n`
-          );
-          if (index === self.length - 1) cssRootVars.push(`}\n`);
-        } else {
-          cssString.push(
-            `.${symbolName}:before { content: "\\${encodedCodes.toString(
-              16
-            )}"; }\n`
-          );
-        }
       }
+      cssToVars.push(`$${symbolName}: "\\${encodedCodes.toString(16)}";\n`);
+      // if (options.useCSSVars) {
+      //   if (index === 0) cssRootVars.push(`:root {\n`);
+      //   if (typeof encodedCodes === "number") {
+      //     // cssRootVars.push(
+      //     //   `--${symbolName}: "\\${encodedCodes.toString(16)}";\n`,
+      //     // );
+
+      //   } else {
+      //     // cssRootVars.push(`--${symbolName}: "${encodedCodes}";\n`);
+      //   }
+      //   // cssString.push(
+      //   //   `.${symbolName}:before { content: var(--${symbolName}); }\n`,
+      //   // );
+      //   if (index === self.length - 1) cssRootVars.push(`}\n`);
+      // } else {
+      //   cssString.push(
+      //     `.${symbolName}:before { content: "\\${encodedCodes.toString(
+      //       16,
+      //     )}"; }\n`,
+      //   );
+      // }
+      cssString.push(
+        `[data-${name}] { --icon-name: "\\${encodedCodes.toString(16)}"; }\n`,
+      );
+
       infoData[name].encodedCode = `\\${encodedCodes.toString(16)}`;
       infoData[name].prefix = prefix;
       infoData[name].className = symbolName;
       infoData[name].unicode = `&#${encodedCodes};`;
       cssIconHtml.push(
-        `<li class="class-icon"><i class="${iconPart}</i><p class="name">${name}</p></li>`
+        html`<li class="class-icon">
+          <i class="${prefix}" data-icon="${name}"></i>
+          <tool-tip class="name">${name}</tool-tip>
+        </li>`,
       );
       unicodeHtml.push(
-        `<li class="unicode-icon"><span class="iconfont">${_code}</span><h4>${name}</h4><span class="unicode">&amp;#${encodedCodes};</span></li>`
+        html`<li class="unicode-icon">
+          <span class="${options.fontName}">${_code}</span>
+          <tool-tip class="name">${name}</tool-tip>
+        </li>`,
       );
-      symbolHtml.push(`
+      symbolHtml.push(html`
         <li class="symbol">
           <svg class="icon" aria-hidden="true">
-            <use xlink:href="${options.fontName}.symbol.svg#${symbolName}"></use>
+            <use xlink:href="${options.fontName}.symbol.svg#${name}"></use>
           </svg>
-          <h4>${symbolName}</h4>
+          <tool-tip class="name">${name}</tool-tip>
         </li>
       `);
     });
@@ -402,7 +417,7 @@ export default async (_options: SvgToFontOptions = {}) => {
         cssOptions.cssPath || "",
         Date.now(),
         excludeFormat,
-        hasTimestamp
+        hasTimestamp,
       );
 
       await copyTemplate(styleTemplatePath, outDir, {

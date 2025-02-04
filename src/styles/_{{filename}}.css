@@ -12,3 +12,7 @@
 {% if not nameAsUnicode %}
 {{cssString}}
 {% endif %}
+
+.{{prefix}}::before {
+  content: var(--icon-name, attr(data-icon));
+}

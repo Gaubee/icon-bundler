@@ -2,12 +2,22 @@
 import React from "react";
 import type { SvgToFontOptions } from "../index.ts";
 import { match, P } from "ts-pattern";
+import fs from "node:fs";
+import path from "node:path";
+const tooltipCss = fs.readFileSync(
+  path.join(import.meta.dirname, "tool-tip.css"),
+  "utf-8",
+);
+const indexCss = fs.readFileSync(
+  path.join(import.meta.dirname, "index.css"),
+  "utf-8",
+);
 
 // 定义 Props 类型
 export type IconPageProps = SvgToFontOptions["website"] & {
   fontname: string;
   classNamePrefix: string;
-  _type: string;
+  _type: SvgToFontOptions["website"]["index"];
   _link: string;
   _IconHtml: string;
   _title: string;
@@ -53,179 +63,50 @@ const IconPage: WebsiteTemplate = ({
   _IconHtml = "",
 }) => {
   // 动态生成 CSS
-  const dynamicStyles =
-    css`
-      * {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      body {
-        color: #696969;
-        font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
-      }
-      a {
-        color: #333;
-        text-decoration: underline;
-      }
-      a:hover {
-        color: rgb(9, 73, 209);
-      }
-      .header {
-        color: #333;
-        text-align: center;
-        padding: 80px 0 60px 0;
-        min-height: 153px;
-        font-size: 14px;
-      }
-      .header .logo svg {
-        height: 120px;
-        width: 120px;
-      }
-      .header h1 {
-        font-size: 42px;
-        padding: 26px 0 10px 0;
-      }
-      .header sup {
-        font-size: 14px;
-        margin: 8px 0 0 8px;
-        position: absolute;
-        color: #7b7b7b;
-      }
-      .info {
-        color: #999;
-        font-weight: normal;
-        max-width: 346px;
-        margin: 0 auto;
-        padding: 20px 0;
-        font-size: 14px;
-      }
-
-      .icons {
-        max-width: 1190px;
-        margin: 0 auto;
-      }
-      .icons ul {
-        text-align: center;
-      }
-      .icons ul li {
-        vertical-align: top;
-        width: 120px;
-        display: inline-block;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.02);
-        border-radius: 3px;
-        padding: 29px 0 10px 0;
-        margin-right: 10px;
-        margin-top: 10px;
-        transition: all 0.6s ease;
-      }
-      .icons ul li:hover {
-        background-color: rgba(0, 0, 0, 0.06);
-      }
-      .icons ul li:hover span {
-        color: #3c75e4;
-        opacity: 1;
-      }
-      .icons ul li .unicode {
-        color: #8c8c8c;
-        opacity: 0.3;
-      }
-      .icons ul li h4 {
-        font-weight: normal;
-        padding: 10px 0 5px 0;
-        display: block;
-        color: #8c8c8c;
-        font-size: 14px;
-        line-height: 12px;
-        opacity: 0.8;
-      }
-      .icons ul li:hover h4 {
-        opacity: 1;
-      }
-      .icons ul li svg {
-        width: 24px;
-        height: 24px;
-      }
-      .icons ul li:hover {
-        color: #3c75e4;
-      }
-      .footer {
-        text-align: center;
-        padding: 10px 0 90px 0;
-      }
-      .footer a {
-        text-align: center;
-        padding: 10px 0 90px 0;
-        color: #696969;
-      }
-      .footer a:hover {
-        color: #0949d1;
-      }
-      .links {
-        text-align: center;
-        padding: 50px 0 0 0;
-        font-size: 14px;
-      }
-    ` +
+  const dynamicStyles = [
+    tooltipCss,
+    indexCss,
     match(_type)
       .with(
         "font-class",
         () => css`
           .icons ul li.class-icon {
-            font-size: 21px;
-            line-height: 21px;
-            padding-bottom: 20px;
-          }
-          .icons ul li.class-icon p {
-            font-size: 12px;
+            font-size: 48px;
+            line-height: 48px;
           }
           .icons ul li.class-icon [class^="${classNamePrefix}-"] {
             font-size: 26px;
           }
-        `
+        `,
       )
       .with(
         "unicode",
         () => css`
-          .icons ul .unicode-icon span {
-            display: block;
-          }
-          .icons ul .unicode-icon h4 {
-            font-size: 12px;
-          }
           @font-face {
             font-family: "${fontname}";
-            src: url(${fontname}.woff2) format("woff2"),
+            src:
+              url(${fontname}.woff2) format("woff2"),
               url(${fontname}.svg#${fontname}) format("svg");
           }
-          .iconfont {
-            font-family: "${fontname}" !important;
-            font-size: 26px;
+          .${classNamePrefix} {
+            font: 36px/1 "${fontname}";
             font-style: normal;
             -webkit-font-smoothing: antialiased;
             -webkit-text-stroke-width: 0.2px;
             -moz-osx-font-smoothing: grayscale;
           }
-        `
+        `,
       )
       .with(
         "symbol",
         () => css`
-          .icons ul li.symbol {
-            padding: 28px 10px 16px 10px;
-            width: 100px;
-          }
           .icons ul li.symbol svg {
-            width: 34px;
-            height: 34px;
+            width: 48px;
+            height: 48px;
           }
-          .icons ul li.symbol h4 {
-            font-size: 12px;
-          }
-        `
+        `,
       )
-      .otherwise(() => "") +
+      .exhaustive(),
     match(corners)
       .with(
         { url: P.any },
@@ -262,9 +143,10 @@ const IconPage: WebsiteTemplate = ({
               animation: octocat-wave 560ms ease-in-out;
             }
           }
-        `
+        `,
       )
-      .otherwise(() => "");
+      .otherwise(() => ""),
+  ];
 
   return (
     <html lang="en">
@@ -282,7 +164,7 @@ const IconPage: WebsiteTemplate = ({
         {_type === "font-class" && _link && (
           <link rel="stylesheet" href={_link} />
         )}
-        <style dangerouslySetInnerHTML={{ __html: dynamicStyles }} />
+        <style dangerouslySetInnerHTML={{ __html: dynamicStyles.join("\n") }} />
       </head>
 
       <body>
