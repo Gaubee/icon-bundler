@@ -1,20 +1,20 @@
-import { Readable } from 'node:stream';
-import { createReadStream, readdir } from 'node:fs';
-import { fileSorter } from './filesorter.js';
+import { Readable } from "node:stream";
+import { createReadStream, readdir } from "node:fs";
+import { fileSorter } from "./filesorter.js";
 import {
   getMetadataService,
   FileMetadata,
   MetadataServiceOptions,
-} from './metadata.js';
-import debug from 'debug';
+} from "./metadata.js";
+import debug from "debug";
 
-const warn = debug('svgicons2svgfont');
+const warn = debug("svgicons2svgfont");
 
 export type SVGIconsDirStreamOptions = {
   metadataProvider: ReturnType<typeof getMetadataService>;
 };
 export type SVGIconStream = Readable & {
-  metadata: Pick<FileMetadata, 'name' | 'unicode'>;
+  metadata: Pick<FileMetadata, "name" | "unicode">;
 };
 
 class SVGIconsDirStream extends Readable {
@@ -33,7 +33,7 @@ class SVGIconsDirStream extends Readable {
     };
 
     if (dir instanceof Array) {
-      this.dir = '';
+      this.dir = "";
       this._getFilesInfos(dir);
     } else {
       this.dir = dir;
@@ -47,17 +47,17 @@ class SVGIconsDirStream extends Readable {
     files = files.slice(0).sort(fileSorter);
     files.forEach((file) => {
       this._options.metadataProvider(
-        (this.dir ? this.dir + '/' : '') + file,
+        (this.dir ? this.dir + "/" : "") + file,
         (err, metadata) => {
           filesProcessed++;
           if (err) {
-            this.emit('error', err);
+            this.emit("error", err);
           }
           if (metadata) {
             if (metadata.renamed) {
               warn(
-                '➕ - Saved codepoint: ' +
-                  'u' +
+                "➕ - Saved codepoint: " +
+                  "u" +
                   metadata.unicode[0]
                     .codePointAt(0)
                     ?.toString(16)
@@ -107,7 +107,7 @@ class SVGIconsDirStream extends Readable {
     if (this.dir) {
       readdir(this.dir, (err, files) => {
         if (err) {
-          this.emit('error', err);
+          this.emit("error", err);
         }
         this._getFilesInfos(files);
       });

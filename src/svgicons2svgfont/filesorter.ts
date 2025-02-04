@@ -6,8 +6,8 @@ export function fileSorter(fileA, fileB) {
 
   if (hasUnicodeA == hasUnicodeB) {
     // just compare alphabetically
-    const fileA_ = fileA.substr(0, fileA.lastIndexOf('.'));
-    const fileB_ = fileB.substr(0, fileB.lastIndexOf('.'));
+    const fileA_ = fileA.substr(0, fileA.lastIndexOf("."));
+    const fileB_ = fileB.substr(0, fileB.lastIndexOf("."));
     return fileA_ < fileB_ ? -1 : 1;
   } else {
     // map true to 0, because we want it to be first

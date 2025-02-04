@@ -1,5 +1,5 @@
-import { join, dirname, basename } from 'node:path';
-import { rename } from 'node:fs';
+import { join, dirname, basename } from "node:path";
+import { rename } from "node:fs";
 
 export type MetadataServiceOptions = {
   prependUnicode: boolean;
@@ -19,7 +19,7 @@ function getMetadataService(options: Partial<MetadataServiceOptions> = {}) {
   const _options: MetadataServiceOptions = {
     prependUnicode: !!options.prependUnicode,
     startUnicode:
-      'number' === typeof options.startUnicode ? options.startUnicode : 0xea01,
+      "number" === typeof options.startUnicode ? options.startUnicode : 0xea01,
   };
 
   return function getMetadataFromFile(
@@ -29,7 +29,7 @@ function getMetadataService(options: Partial<MetadataServiceOptions> = {}) {
     const fileBasename = basename(file);
     const metadata: FileMetadata = {
       path: file,
-      name: '',
+      name: "",
       unicode: [],
       renamed: false,
     };
@@ -38,22 +38,22 @@ function getMetadataService(options: Partial<MetadataServiceOptions> = {}) {
     );
 
     metadata.name =
-      matches && matches[2] ? matches[2] : 'icon' + _options.startUnicode;
+      matches && matches[2] ? matches[2] : "icon" + _options.startUnicode;
 
     if (matches && matches[1]) {
-      metadata.unicode = matches[1].split(',').map((match) => {
+      metadata.unicode = matches[1].split(",").map((match) => {
         match = match.substring(1);
         return match
-          .split('u')
+          .split("u")
           .map((code) => String.fromCodePoint(parseInt(code, 16)))
-          .join('');
+          .join("");
       });
       if (-1 !== usedUnicodes.indexOf(metadata.unicode[0])) {
         cb(
           new Error(
-            'The unicode codepoint of the glyph ' +
+            "The unicode codepoint of the glyph " +
               metadata.name +
-              ' seems to be already used by another glyph.',
+              " seems to be already used by another glyph.",
           ),
         );
         return;
@@ -70,22 +70,22 @@ function getMetadataService(options: Partial<MetadataServiceOptions> = {}) {
         metadata.renamed = true;
         metadata.path = join(
           dirname(file),
-          'u' +
+          "u" +
             metadata.unicode[0].codePointAt(0)?.toString(16).toUpperCase() +
-            '-' +
+            "-" +
             fileBasename,
         );
         rename(file, metadata.path, (err) => {
           if (err) {
             cb(
               new Error(
-                'Could not save codepoint: ' +
-                  'u' +
+                "Could not save codepoint: " +
+                  "u" +
                   metadata.unicode[0]
                     .codePointAt(0)
                     ?.toString(16)
                     .toUpperCase() +
-                  ' for ' +
+                  " for " +
                   fileBasename,
               ),
             );

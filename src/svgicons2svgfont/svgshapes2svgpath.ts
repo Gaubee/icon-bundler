@@ -10,82 +10,82 @@ export default svgShapesToPath;
 
 // Shapes helpers (should also move elsewhere)
 function svgShapesToPathRectToPath(attributes) {
-  const x = 'undefined' !== typeof attributes.x ? parseFloat(attributes.x) : 0;
-  const y = 'undefined' !== typeof attributes.y ? parseFloat(attributes.y) : 0;
+  const x = "undefined" !== typeof attributes.x ? parseFloat(attributes.x) : 0;
+  const y = "undefined" !== typeof attributes.y ? parseFloat(attributes.y) : 0;
   const width =
-    'undefined' !== typeof attributes.width ? parseFloat(attributes.width) : 0;
+    "undefined" !== typeof attributes.width ? parseFloat(attributes.width) : 0;
   const height =
-    'undefined' !== typeof attributes.height
+    "undefined" !== typeof attributes.height
       ? parseFloat(attributes.height)
       : 0;
   const rx =
-    'undefined' !== typeof attributes.rx
+    "undefined" !== typeof attributes.rx
       ? parseFloat(attributes.rx)
-      : 'undefined' !== typeof attributes.ry
+      : "undefined" !== typeof attributes.ry
         ? parseFloat(attributes.ry)
         : 0;
   const ry =
-    'undefined' !== typeof attributes.ry ? parseFloat(attributes.ry) : rx;
+    "undefined" !== typeof attributes.ry ? parseFloat(attributes.ry) : rx;
 
   return (
-    '' +
+    "" +
     // start at the left corner
-    'M' +
+    "M" +
     (x + rx) +
-    ' ' +
+    " " +
     y +
     // top line
-    'h' +
+    "h" +
     (width - rx * 2) +
     // upper right corner
-    (rx || ry ? 'a ' + rx + ' ' + ry + ' 0 0 1 ' + rx + ' ' + ry : '') +
+    (rx || ry ? "a " + rx + " " + ry + " 0 0 1 " + rx + " " + ry : "") +
     // Draw right side
-    'v' +
+    "v" +
     (height - ry * 2) +
     // Draw bottom right corner
-    (rx || ry ? 'a ' + rx + ' ' + ry + ' 0 0 1 ' + rx * -1 + ' ' + ry : '') +
+    (rx || ry ? "a " + rx + " " + ry + " 0 0 1 " + rx * -1 + " " + ry : "") +
     // Down the down side
-    'h' +
+    "h" +
     (width - rx * 2) * -1 +
     // Draw bottom right corner
     (rx || ry
-      ? 'a ' + rx + ' ' + ry + ' 0 0 1 ' + rx * -1 + ' ' + ry * -1
-      : '') +
+      ? "a " + rx + " " + ry + " 0 0 1 " + rx * -1 + " " + ry * -1
+      : "") +
     // Down the left side
-    'v' +
+    "v" +
     (height - ry * 2) * -1 +
     // Draw bottom right corner
-    (rx || ry ? 'a ' + rx + ' ' + ry + ' 0 0 1 ' + rx + ' ' + ry * -1 : '') +
+    (rx || ry ? "a " + rx + " " + ry + " 0 0 1 " + rx + " " + ry * -1 : "") +
     // Close path
-    'z'
+    "z"
   );
 }
 
 function svgShapesToPathPolylineToPath(attributes) {
-  return 'M' + attributes.points;
+  return "M" + attributes.points;
 }
 
 function svgShapesToPathLineToPath(attributes) {
   // Move to the line start
   return (
-    '' +
-    'M' +
+    "" +
+    "M" +
     (parseFloat(attributes.x1) || 0).toString(10) +
-    ' ' +
+    " " +
     (parseFloat(attributes.y1) || 0).toString(10) +
-    ' ' +
+    " " +
     ((parseFloat(attributes.x1) || 0) + 1).toString(10) +
-    ' ' +
+    " " +
     ((parseFloat(attributes.y1) || 0) + 1).toString(10) +
-    ' ' +
+    " " +
     ((parseFloat(attributes.x2) || 0) + 1).toString(10) +
-    ' ' +
+    " " +
     ((parseFloat(attributes.y2) || 0) + 1).toString(10) +
-    ' ' +
+    " " +
     (parseFloat(attributes.x2) || 0).toString(10) +
-    ' ' +
+    " " +
     (parseFloat(attributes.y2) || 0).toString(10) +
-    'Z'
+    "Z"
   );
 }
 
@@ -93,40 +93,40 @@ function svgShapesToPathCircleToPath(attributes) {
   const cx = parseFloat(attributes.cx || 0);
   const cy = parseFloat(attributes.cy || 0);
   const rx =
-    'undefined' !== typeof attributes.rx
+    "undefined" !== typeof attributes.rx
       ? parseFloat(attributes.rx)
       : parseFloat(attributes.r);
   const ry =
-    'undefined' !== typeof attributes.ry
+    "undefined" !== typeof attributes.ry
       ? parseFloat(attributes.ry)
       : parseFloat(attributes.r);
 
   // use two A commands because one command which returns to origin is invalid
   return (
-    '' +
-    'M' +
+    "" +
+    "M" +
     (cx - rx) +
-    ',' +
+    "," +
     cy +
-    'A' +
+    "A" +
     rx +
-    ',' +
+    "," +
     ry +
-    ' 0,0,0 ' +
+    " 0,0,0 " +
     (cx + rx) +
-    ',' +
+    "," +
     cy +
-    'A' +
+    "A" +
     rx +
-    ',' +
+    "," +
     ry +
-    ' 0,0,0 ' +
+    " 0,0,0 " +
     (cx - rx) +
-    ',' +
+    "," +
     cy
   );
 }
 
 function svgShapesToPathPolygonToPath(attributes) {
-  return 'M' + attributes.points + 'Z';
+  return "M" + attributes.points + "Z";
 }

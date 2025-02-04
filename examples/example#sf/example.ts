@@ -21,22 +21,17 @@ const resolveDir = createResolveTo(import.meta.dirname);
   }
   fs.mkdirSync(tmpSrc, { recursive: true });
 
-  let count = 0;
   const allNames = fs
     .readdirSync(sourceDir)
     .filter((name) => name.endsWith(".svg"))
     .sort((a, b) => a.localeCompare(b));
 
-  for (const name of ["rainbow.svg", "character_book_closed.svg"]) {
-    count++;
+  for (const name of allNames) {//["rainbow.svg", "character_book_closed.svg"]
     const targetName = name.replaceAll(".", "_").replace(/_svg$/, ".svg");
     fs.copyFileSync(
       path.join(sourceDir, targetName),
       path.join(tmpSrc, targetName),
     );
-    if (count >= 2) {
-      break;
-    }
   }
 
   const fontData = await iconBundler({
@@ -51,7 +46,7 @@ const resolveDir = createResolveTo(import.meta.dirname);
     svgicons2svgfont: {
       usePathBounds: false,
       normalize: false,
-      fontHeight: 30,
+      fontHeight: 200,
       centerVertically: true,
       centerHorizontally: true,
     },
